@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AdvertRepository")
@@ -15,6 +16,7 @@ class Advert
      * @ORM\JoinColumn(nullable=false)
      */
     private $image;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -29,16 +31,35 @@ class Advert
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *  min=3,
+     *  max=255,
+     *  minMessage = "Your title must be at least {{ limit }} characters long",
+     *  maxMessage = "Your title cannot be longer than {{ limit }} characters"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *  min=3,
+     *  max=255,
+     *  minMessage = "Your author name must be at least {{ limit }} characters long",
+     *  maxMessage = "Your author name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $author;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *  min=3,
+     *  minMessage = "Your content must be at least {{ limit }} characters long"
+     * )
      */
     private $content;
 

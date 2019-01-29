@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
@@ -18,6 +20,11 @@ class Image
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Url(
+     * Message = "The url '{{ value }}' is not a valid url",
+     * protocols = {"http", "https", "ftp"}
+     * )
      */
     private $url;
 
