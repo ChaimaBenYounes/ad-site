@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -67,6 +69,16 @@ class Advert
      * @ORM\Column(type="boolean")
      */
     private $published;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AdvertSkill", mappedBy="advert")
+     */
+    private $advertSkills;
+
+    public function __construct()
+    {
+        $this->advertSkills = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -141,6 +153,37 @@ class Advert
     public function setImage(Image $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AdvertSkill[]
+     */
+    public function getAdvertSkills(): Collection
+    {
+        return $this->advertSkills;
+    }
+
+    public function addAdvertSkill(AdvertSkill $advertSkill): self
+    {
+        if (!$this->advertSkills->contains($advertSkill)) {
+            $this->advertSkills[] = $advertSkill;
+            $advertSkill->setAdvert($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdvertSkill(AdvertSkill $advertSkill): self
+    {
+        if ($this->advertSkills->contains($advertSkill)) {
+            $this->advertSkills->removeElement($advertSkill);
+            // set the owning side to null (unless already changed)
+            if ($advertSkill->getAdvert() === $this) {
+                $advertSkill->setAdvert(null);
+            }
+        }
 
         return $this;
     }

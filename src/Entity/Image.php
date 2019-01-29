@@ -22,7 +22,7 @@ class Image
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Url(
-     * Message = "The url '{{ value }}' is not a valid url",
+     * message = "The url '{{ value }}' is not a valid url",
      * protocols = {"http", "https", "ftp"}
      * )
      */
