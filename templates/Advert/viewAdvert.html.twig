@@ -3,6 +3,11 @@
 {%  block body %}
 {{ parent()}}
 <div class="col-lg-9">
+            {% for message in app.flashes('notice') %}
+              <div class="alert alert-success">
+                  {{ message }}
+              </div>
+            {% endfor %}
 
           <div class="card mt-4">
             <img class="card-img-top img-fluid" src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
@@ -14,7 +19,20 @@
               <span class="text-warning">{{ advert.author }}</span>
             
             </div>
+             {% if listAdvertSkills|length > 0 %}
+          <div>
+               <h6 class="card-title">Cette annonce requiert les compétences suivantes :</h6>
+              <ul>
+                {% for advertSkill in listAdvertSkills %}
+                  <li>{{ advertSkill.skill.name }} : niveau {{ advertSkill.level }}</li>
+                {% endfor %}
+              </ul>
           </div>
+          {% endif %}
+          </div>
+
+         
+
           <!-- /.card -->
 
           <div class="card card-outline-secondary my-4">
@@ -35,6 +53,7 @@
             </div>
           </div>
           <!-- /.card -->
+          
 
 </div>
         <!-- /.col-lg-9 -->

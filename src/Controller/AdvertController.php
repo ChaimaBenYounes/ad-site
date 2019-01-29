@@ -11,8 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
-use App\Entity\{Advert,Image,Application};
+use App\Entity\{Advert, Image, Application, Skill, AdvertSkill};
 use App\Repository\AdvertRepository;
 use App\Form\{AdvertType,AdvertEditType};
 
@@ -24,6 +25,7 @@ class AdvertController extends AbstractController
     public function showAllAdvert(EntityManagerInterface $em )
     {
         $advertsRepository = $em->getRepository(Advert::class)->findAll();
+        
 
         return $this->render('Advert/advert.html.twig',[
             'adverts' => $advertsRepository
@@ -33,10 +35,17 @@ class AdvertController extends AbstractController
     /**
      * @Route("/advert/{id}", name="view", requirements={"id"="\d+"})
      */
-    public function viewAdvert(Advert $advert)
+    public function viewAdvert(EntityManagerInterface $em, Advert $advert)
     {
+        /*if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce d'id ".$advert->getId()." n'existe pas.");
+        }*/
+
+        $listAdvertSkills = $em->getRepository(AdvertSkill::class)->findBy(['advert' => $advert]);
+        
         return $this->render('Advert/viewAdvert.html.twig', [
-            'advert' => $advert
+            'advert' => $advert,
+            'listAdvertSkills' => $listAdvertSkills
         ]);
 
     }
@@ -62,7 +71,11 @@ class AdvertController extends AbstractController
             $em->persist($advert);
             $em->flush();
       
-      
+                $this->addFlash(
+                    'notice',
+                    'Your changes were saved!'
+                 );
+                 
                 return $this->redirectToRoute('view', ['id' => $advert->getId()]);
         }
 
@@ -155,6 +168,31 @@ class AdvertController extends AbstractController
 
 
         $em->flush();
+
+        return new Response('ok');
+    }
+
+    /**
+     * @Route("/load", name="load")
+     */
+    public function loadTest(ObjectManager $manager)
+    {
+        $adverts = $advertsRepository = $manager->getRepository(Advert::class)->findAll();
+        $skills = $advertsRepository = $manager->getRepository(Skill::class)->findAll();
+        $level = ['Débutant', 'Avisé ', 'Expert'];
+
+        //var_dump($level[array_rand($level)]); die();
+
+        for ($i=1; $i < 30; $i++) {
+            $advertSkill = new AdvertSkill();
+            $advertSkill->setLevel($level[array_rand($level)]);
+            $advertSkill->setAdvert($adverts[array_rand($adverts)]);
+            $advertSkill->setSkill($skills[array_rand($skills)]);
+
+            $manager->persist($advertSkill);
+        }
+       
+        $manager->flush();
 
         return new Response('ok');
     }
