@@ -22,7 +22,7 @@ class AdvertSkill
     private $level;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Advert", inversedBy="advertSkills")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Advert", inversedBy="advertSkills", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $advert;

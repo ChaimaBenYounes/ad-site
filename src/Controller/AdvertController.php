@@ -15,7 +15,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use App\Entity\{Advert, Image, Application, Skill, AdvertSkill};
 use App\Repository\AdvertRepository;
-use App\Form\{AdvertType,AdvertEditType};
+use App\Form\{AdvertType, AdvertEditType, SkillType, AdvertSkillType };
 
 class AdvertController extends AbstractController
 {
@@ -57,26 +57,38 @@ class AdvertController extends AbstractController
     {
 
         $advert = new Advert();
+        //$advertSkill = new AdvertSkill();
+        //$advertSkill->setAdvert($advert->getId());
 
-        $form   = $this->get('form.factory')->create(AdvertType::class, $advert);
+        // Cette date sera donc préaffichée dans le formulaire, cela facilite le travail de l'utilisateur
+        $advert->setDate(new \Datetime());
+
+        //$form   = $this->get('form.factory')->create(AdvertType::class, $advert);
+        //Methode raccourcie 
         $form = $this->createForm(AdvertType::class, $advert);
         $form->handleRequest($request);
 
-        
         if ($form->isSubmitted() && $form->isValid()) {
 
             $advert = $form->getData();
 
+            foreach($advert->getAdvertSkills() as $advertSkill){
+                
+                $advertSkill->setAdvert($advert);
+            }
+            
+            //dd($advert->getAdvertSkills(), $advert, $request);
             $em = $this->getDoctrine()->getManager();
             $em->persist($advert);
+
             $em->flush();
-      
-                $this->addFlash(
-                    'notice',
-                    'Your changes were saved!'
-                 );
+
+            $this->addFlash(
+                'notice',
+                'Your changes were saved!'
+            );
                  
-                return $this->redirectToRoute('view', ['id' => $advert->getId()]);
+            return $this->redirectToRoute('view', ['id' => $advert->getId()]);
         }
 
 
@@ -92,7 +104,7 @@ class AdvertController extends AbstractController
     public function editAdvert(Advert $advert,Request $request, $id)
     {
         
-        $form   = $this->get('form.factory')->create(AdvertEditType::class, $advert);
+        
         $form = $this->createForm(AdvertEditType::class, $advert);
         $form->handleRequest($request);
 
@@ -103,8 +115,13 @@ class AdvertController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($advert);
             $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Your changes were saved!'
+            );
       
-                return $this->redirectToRoute('view', ['id' => $advert->getId()]);
+            return $this->redirectToRoute('view', ['id' => $advert->getId()]);
             
         }
         return $this->render('Advert/addAdvert.html.twig',[
