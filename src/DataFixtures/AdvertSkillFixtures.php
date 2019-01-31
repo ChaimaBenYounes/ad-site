@@ -11,7 +11,7 @@ class AdvertSkillFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $adverts = $advertsRepository = $manager->getRepository(Advert::class)->findAll();
+        /*$adverts = $advertsRepository = $manager->getRepository(Advert::class)->findAll();
         $skills = $advertsRepository = $manager->getRepository(Skill::class)->findAll();
         $level = ['Débutant', 'Avisé ', 'Expert'];
 
@@ -30,6 +30,6 @@ class AdvertSkillFixtures extends Fixture
         }
        
 
-        $manager->flush();
+        $manager->flush();*/
     }
 }
