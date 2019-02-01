@@ -75,9 +75,15 @@ class Advert
      */
     private $advertSkills;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category")
+     */
+    private $categories;
+
     public function __construct()
     {
         $this->advertSkills = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -183,6 +189,32 @@ class Advert
             if ($advertSkill->getAdvert() === $this) {
                 $advertSkill->setAdvert(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->contains($category)) {
+            $this->categories->removeElement($category);
         }
 
         return $this;

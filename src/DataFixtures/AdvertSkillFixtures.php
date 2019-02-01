@@ -6,13 +6,15 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\{Skill, Advert, AdvertSkill};
 use App\Repository\{AdvertRepository,SkillRepository};
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use App\DataFixtures\{SkillFixture, AdvertFixtures};
 
-class AdvertSkillFixtures extends Fixture
+class AdvertSkillFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        /*$adverts = $advertsRepository = $manager->getRepository(Advert::class)->findAll();
-        $skills = $advertsRepository = $manager->getRepository(Skill::class)->findAll();
+        $adverts = $manager->getRepository(Advert::class)->findAll();
+        $skills = $manager->getRepository(Skill::class)->findAll();
         $level = ['Débutant', 'Avisé ', 'Expert'];
 
         //var_dump($adverts[array_rand($adverts)]); die();
@@ -30,6 +32,13 @@ class AdvertSkillFixtures extends Fixture
         }
        
 
-        $manager->flush();*/
+        $manager->flush();
+    }
+
+    public function getDependencies() {
+        return [
+            SkillFixture::class,
+            AdvertFixtures::class,
+        ];
     }
 }
