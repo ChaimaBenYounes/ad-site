@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use App\Entity\{Advert, Image, Application, Skill, AdvertSkill};
+use App\Entity\{Advert, Image, Application, Skill, AdvertSkill, Category};
 use App\Repository\AdvertRepository;
 use App\Form\{AdvertType, AdvertEditType, SkillType, AdvertSkillType };
 
@@ -65,19 +65,27 @@ class AdvertController extends AbstractController
 
         //$form   = $this->get('form.factory')->create(AdvertType::class, $advert);
         //Methode raccourcie 
+
         $form = $this->createForm(AdvertType::class, $advert);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            //dd($request);
             $advert = $form->getData();
 
+            
             foreach($advert->getAdvertSkills() as $advertSkill){
                 
                 $advertSkill->setAdvert($advert);
             }
+
+            /*foreach($advert->getCategories() as $category){
+                
+                $advert->addCtegoy($advert);
+            }*/
             
-            //dd($advert->getAdvertSkills(), $advert, $request);
             $em = $this->getDoctrine()->getManager();
             $em->persist($advert);
 
@@ -90,6 +98,8 @@ class AdvertController extends AbstractController
                  
             return $this->redirectToRoute('view', ['id' => $advert->getId()]);
         }
+
+        //dd($form->createView());
 
 
         return $this->render('Advert/addAdvert.html.twig',[

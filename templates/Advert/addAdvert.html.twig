@@ -25,7 +25,11 @@ en respectant la vue définit dans le thème du formulaire que vous utilisez. #}
 
 {# form_rest() affiche tous les champs manquants du formulaire #}
 
+
 {{ form_widget(form.advertSkills, {'attr' :{'class' : 'my-selector'}}) }}
+{{ form_label(form.Categories, 'Categories ')}}
+{{ form_widget(form.Categories, {'attr' :{'class' : 'my-selector'}}) }}
+
 
 {{ form_rest(form) }}
 
@@ -41,4 +45,5 @@ en respectant la vue définit dans le thème du formulaire que vous utilisez. #}
     <script type="text/javascript">
         $('.my-selector').collection();
     </script>
+
 {% endblock %}

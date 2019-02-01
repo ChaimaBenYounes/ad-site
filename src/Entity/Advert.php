@@ -76,7 +76,7 @@ class Advert
     private $advertSkills;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Category")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category", cascade={"persist"})
      */
     private $categories;
 

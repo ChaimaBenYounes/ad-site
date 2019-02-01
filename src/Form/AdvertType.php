@@ -11,9 +11,10 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-use App\Entity\{Advert, Skill, AdvertSkill};
-use App\Form\{ImageType, SkillType, AdvertSkillType};
+use App\Entity\{Advert, Skill, AdvertSkill, Category};
+use App\Form\{ImageType, SkillType, AdvertSkillType, CategoryType};
 
 class AdvertType extends AbstractType
 {
@@ -26,7 +27,6 @@ class AdvertType extends AbstractType
             ->add('content', TextareaType::class)
             ->add('image', ImageType::class)
             ->add('published', CheckboxType::class, ['required' => false])
-
             ->add('advertSkills', CollectionType::class, [
                 'entry_type' => AdvertSkillType::class,
                 'label'        => 'List skills',
@@ -35,6 +35,33 @@ class AdvertType extends AbstractType
                 'prototype'    => true,
                 'required'     => false,
             ])
+            /*->add('Categories', CollectionType::class, [
+                'entry_type' => CategoryType::class,
+                'label'        => 'List Categories',
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype'    => true,
+                'required'     => false,
+            ])*/
+
+            ->add('Categories', EntityType::class, [
+                'class' => Category::class,
+                'label' =>'Categories', 
+                'choice_label' => 'name',
+                'expanded' => false,
+                'multiple'      => true,
+            
+               
+            ])
+
+            /*->add('categories', EntityType::class, [
+                'label' =>'Categories', 
+                'placeholder' => 'Choose an option',
+                'class' => Category::class,
+                'choice_label'  => function( $categories){
+                    return $categories->getName();
+                }
+            ])*/
             ->add('Enregistrer', SubmitType::class)
         ;
     }

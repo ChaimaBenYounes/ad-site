@@ -33,7 +33,6 @@ class AdvertSkillType extends AbstractType
                     'Débutant' => 'Débutant',
                 ],
             ])
-
             ->add('save', SubmitType::class)
         ;
     }
