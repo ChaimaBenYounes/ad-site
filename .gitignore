@@ -3,6 +3,7 @@
 /.env.local
 /.env.local.php
 /.env.*.local
+/.env
 /public/bundles/
 /var/
 /vendor/
@@ -20,4 +21,9 @@
 ###< symfony/ninsuo/symfony-collection ###
 app/Resources/views/jquery.collection.html.twig
 web/js/jquery.collection.js
-###< symfony/ninsuo/symfony-collection ###
+###> symfony/ninsuo/symfony-collection ###
+
+###< PhpStorm ###
+.idea/
+.idea/*
+###> PhpStorm ###
