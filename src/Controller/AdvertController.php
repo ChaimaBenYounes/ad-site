@@ -2,30 +2,40 @@
 
 namespace App\Controller;
 
+use App\Tuto\ColorContainer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-
-
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use App\Entity\{Advert, Image, Application, Skill, AdvertSkill, Category};
 use App\Repository\AdvertRepository;
 use App\Form\{AdvertType, AdvertEditType, SkillType, AdvertSkillType };
 
 class AdvertController extends AbstractController
 {
+    protected $colorContainer;
+
+    public function __construct(ColorContainer $colorContainer)
+    {
+        $this->colorContainer = $colorContainer;
+    }
+
     /**
      * @Route("/home", name="home")
      */
-    public function showAllAdvert(EntityManagerInterface $em )
+    public function showAllAdvert(EntityManagerInterface $em)
     {
+
+/*       $availbleColors = $this->colorContainer->getColors();
+       foreach ($availbleColors as $collectedTagColor)
+       {
+           echo $collectedTagColor->getColor().'<br>';
+       }
+        exit;*/
         $advertsRepository = $em->getRepository(Advert::class)->findAll();
-        
 
         return $this->render('Advert/advert.html.twig',[
             'adverts' => $advertsRepository
@@ -47,7 +57,6 @@ class AdvertController extends AbstractController
             'advert' => $advert,
             'listAdvertSkills' => $listAdvertSkills
         ]);
-
     }
 
     /**
@@ -55,11 +64,9 @@ class AdvertController extends AbstractController
      */
     public function addAdvert(Request $request)
     {
-
         $advert = new Advert();
         //$advertSkill = new AdvertSkill();
         //$advertSkill->setAdvert($advert->getId());
-
         // Cette date sera donc préaffichée dans le formulaire, cela facilite le travail de l'utilisateur
         $advert->setDate(new \Datetime());
 
@@ -67,17 +74,12 @@ class AdvertController extends AbstractController
         //Methode raccourcie 
 
         $form = $this->createForm(AdvertType::class, $advert);
-        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            //dd($request);
             $advert = $form->getData();
 
-            
-            foreach($advert->getAdvertSkills() as $advertSkill){
-                
+            foreach ($advert->getAdvertSkills() as $advertSkill) {
                 $advertSkill->setAdvert($advert);
             }
 
@@ -101,11 +103,9 @@ class AdvertController extends AbstractController
 
         //dd($form->createView());
 
-
         return $this->render('Advert/addAdvert.html.twig',[
             'form' => $form->createView()
         ]);
-
     }
 
     /**
@@ -113,15 +113,11 @@ class AdvertController extends AbstractController
      */
     public function editAdvert(Advert $advert,Request $request, $id)
     {
-        
-        
         $form = $this->createForm(AdvertEditType::class, $advert);
         $form->handleRequest($request);
 
-        
         if ($form->isSubmitted() && $form->isValid()) {
 
-        
             $em = $this->getDoctrine()->getManager();
             $em->persist($advert);
             $em->flush();
@@ -132,13 +128,11 @@ class AdvertController extends AbstractController
             );
       
             return $this->redirectToRoute('view', ['id' => $advert->getId()]);
-            
         }
+
         return $this->render('Advert/addAdvert.html.twig',[
             'form' => $form->createView()
         ]);
-       
-
     }
      
     /**

@@ -13,7 +13,7 @@
             <img class="card-img-top img-fluid" src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
            
             <div class="card-body">
-              <h3 class="card-title">{{ advert.title }}</h3>
+              <h3 class="card-title">{{ title_transformer(advert.title) }}</h3>
               <h4>{{ advert.date|date('d/m/Y', "Europe/Paris") }}</h4>
               <p class="card-text">{{ advert.content }}</p>
               <span class="text-warning">{{ advert.author }}</span>
