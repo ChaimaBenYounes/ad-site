@@ -26,3 +26,19 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Tuto\ColorContainer:
+        arguments: ['blue']
+
+    App\Tuto\Red:
+        tags: ['color.service']
+
+    App\Twig\TitleToUpperExtension:
+        public: true
+        tags: ['twig.extension']
+
+    #App\Tuto\Blue:
+        #tags: ['color.service']
+
+    #App\Tuto\Yello:
+        #tags: ['color.service']
