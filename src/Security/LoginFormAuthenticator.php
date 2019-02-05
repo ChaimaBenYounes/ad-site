@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
-
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -34,16 +33,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request)
     {
-       //dd($request); 
-
         return $request->attributes->get('_route') === 'login'
             && $request->isMethod('POST');
     }
 
     public function getCredentials(Request $request)
     {
-        //dd($request); 
-        // dd($request->request->all()) ; <=> dd($_POST)
+        //dd($request);
+        // dd($request->request->all()) <=> dd($_POST)
         $credentials = [
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),

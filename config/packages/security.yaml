@@ -19,6 +19,13 @@ security:
             logout:
                 path: app_logout
 
+            remember_me:
+                #php bin/console debug:container --parameter=kernel.secret
+                secret: '%kernel.secret%' 
+                # Optional it defaulte to one year / 30 days in seconds
+                lifetime: 2592000 
+                
+
             # activate different ways to authenticate
 
             # http_basic: true
