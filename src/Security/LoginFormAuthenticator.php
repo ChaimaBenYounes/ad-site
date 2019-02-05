@@ -6,36 +6,48 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
+
+use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Routing\RouterInterface;
+
 use App\Repository\UserRepository;
+
 
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     private $userRepository;
     private $router;
+    private $csrfTokenManager;
 
-    public function __construct( UserRepository $userRepository, RouterInterface $router){
+    public function __construct( UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager ){
 
         $this->userRepository = $userRepository;
         $this->router = $router;
+        $this->csrfTokenManager = $csrfTokenManager;
     }
+
     public function supports(Request $request)
     {
+       //dd($request); 
+
         return $request->attributes->get('_route') === 'login'
             && $request->isMethod('POST');
     }
 
     public function getCredentials(Request $request)
     {
-        //dd($request->request->all()) ;
+        //dd($request); 
         // dd($request->request->all()) ; <=> dd($_POST)
         $credentials = [
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
+            'csrf_token' => $request->request->get('_csrf_token'),
         ];
 
         $request->getSession()->set(
@@ -48,7 +60,17 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        //dd($credentials);
+        // Verifying the CSRF Token  `CsrfTokenManagerInterface`
+        // getToken($tokenId), refreshToken($tokenId), removeToken($tokenId), isTokenValid(CsrfToken $token) ...
+        // CsrfToken(id, value)
+        // The `id` is referring to that string - authenticate
+        // The `value` is the CSRF token value that the user submitted = $credentials['csrf_token']
+        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+
+        if(!$this->csrfTokenManager->isTokenValid($token)){
+            throw new InvalidCsrfTokenException();
+        }
+        // dd($credentials);
         // dd($credentials) recupere les valeurs du getCredentials
         return $this->userRepository->findOneBy(['email'=> $credentials['email']]);
     }
@@ -71,5 +93,5 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return $this->router->generate('login');
     }
 
-  
+
 }
