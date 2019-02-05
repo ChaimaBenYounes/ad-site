@@ -28,22 +28,23 @@
 
       <div class="container">
         <a class="navbar-brand" href="{{ path('home') }}">Site Annonce</a>
-        <a class="navbar-toggler" href="{{ path('login') }}">Login</a>
-        {#
-        
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
+        {% if is_granted('ROLE_USER') %}
+        
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
               <a class="nav-link" href="{{ path('home')}}">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
+            {% if is_granted('ROLE_ADMIN') %}
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+              <a class="nav-link" href="{{ path('app_account') }}">Account</a>
             </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="#">Services</a>
             </li>
@@ -51,8 +52,11 @@
               <a class="nav-link" href="#">Contact</a>
             </li>
           </ul>
-        </div>
-        #}
+          <a class="nav-item active" href="{{ path('app_logout') }}">Logout</a>
+        {% else %}
+          <a class="nav-item active" href="{{ path('app_login') }}">Login</a>
+        {% endif %}
+         </div>
       </div>
       
     </nav>

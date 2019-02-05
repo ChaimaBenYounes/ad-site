@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @IsGranted("ROLE_USER")
+ * @IsGranted("ROLE_ADMIN")
  */
 class AccountController extends AbstractController
 {
