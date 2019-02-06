@@ -49,7 +49,7 @@
               <a class="nav-link" href="#">Services</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
+              <a class="nav-link" href="#"> Contact </a>
             </li>
           </ul>
           <a class="nav-item active" href="{{ path('app_logout') }}">Logout</a>
@@ -72,7 +72,7 @@
             
             <div class="col-lg-3">
 
-                <h1 class="my-4">Annonces </h1>
+                <h1 class="my-4"> Bonjour {{ app.user.firstName }}</h1>
                 <div class="list-group">
 
                     <a href="{{ path('home')}}" class="list-group-item">Tous les annonces </a>
