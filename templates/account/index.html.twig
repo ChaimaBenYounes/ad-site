@@ -3,5 +3,16 @@
 {% block title %}Manage Account!{% endblock %}
 
 {% block body %}
-   <h1>Manage Your Account {{ app.user.firstName }}</h1>
+   <h1>Manage Your Account {{ app.user.firstName }}</h1> </br>
+   <ul>
+   <li> {{ app.user.email }}</li>
+   <li> {% for role in  app.user.roles %}
+        {{ role }} 
+        {% endfor %}
+    </li>
+ 
+   
+   </ul>
+  
+
 {% endblock %}

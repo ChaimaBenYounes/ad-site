@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Psr\Log\LoggerInterface;
 
 /**
- * @IsGranted("ROLE_ADMIN")
+ * @IsGranted("ROLE_USER")
  */
 class AccountController extends AbstractController
 {
@@ -20,4 +20,6 @@ class AccountController extends AbstractController
         $logger->debug('Checking account page for '.$this->getUser()->getEmail());
         return $this->render('account/index.html.twig');
     }
+
+   
 }
