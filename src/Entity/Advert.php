@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Advert
 {
-
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Image", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
@@ -44,18 +43,6 @@ class Advert
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(
-     *  min=3,
-     *  max=255,
-     *  minMessage = "Your author name must be at least {{ limit }} characters long",
-     *  maxMessage = "Your author name cannot be longer than {{ limit }} characters"
-     * )
-     */
-    private $author;
-
-    /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank
      * @Assert\Length(
@@ -79,6 +66,12 @@ class Advert
      * @ORM\ManyToMany(targetEntity="App\Entity\Category", cascade={"persist"})
      */
     private $categories;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="adverts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     public function __construct()
     {
@@ -111,18 +104,6 @@ class Advert
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }
@@ -216,6 +197,18 @@ class Advert
         if ($this->categories->contains($category)) {
             $this->categories->removeElement($category);
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
