@@ -2,43 +2,37 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\{Skill, Advert, AdvertSkill};
 use App\Repository\{AdvertRepository,SkillRepository};
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\DataFixtures\{SkillFixture, AdvertFixtures};
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class AdvertSkillFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+
+    private static $level = ['Débutant', 'Avisé ', 'Expert'];
+
+    protected function loadData(ObjectManager $manager)
     {
-        $adverts = $manager->getRepository(Advert::class)->findAll();
-        $skills = $manager->getRepository(Skill::class)->findAll();
-        $level = ['Débutant', 'Avisé ', 'Expert'];
+        $this->createMany(10, 'main_advertSkill', function($i) use ($manager) {
 
-        //var_dump($adverts[array_rand($adverts)]); die();
-
-        for ($i=1; $i < 30; $i++) {
             $advertSkill = new AdvertSkill();
-            
-                $advertSkill->setLevel($level[array_rand($level)]);
-          
-                $advertSkill->setAdvert($adverts[array_rand($adverts)]);
+            $advertSkill->setLevel($this->faker->randomElement(self::$level));
+            $advertSkill->setAdvert($this->getRandomReference('main_adverts'));
+            $advertSkill->setSkill($this->getRandomReference('main_skill'));
 
-                $advertSkill->setSkill($skills[array_rand($skills)]);
-           
-            $manager->persist($advertSkill);
-        }
-       
+            return $advertSkill;
+        });
 
         $manager->flush();
+
     }
 
     public function getDependencies() {
         return [
-            SkillFixture::class,
             AdvertFixtures::class,
+            SkillFixture::class,
         ];
     }
 }

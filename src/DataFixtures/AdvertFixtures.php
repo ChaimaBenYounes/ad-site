@@ -2,49 +2,33 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Factory;
 use App\Entity\{Advert,Image, User};
-use App\DataFixtures\UserFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
-
-class AdvertFixtures extends Fixture
+class AdvertFixtures extends BaseFixture implements DependentFixtureInterface
 {
-    private $faker;
-
-    public function load(ObjectManager $manager)
+    protected function loadData(ObjectManager $manager)
     {
-       $this->faker = Factory::create();
-       $this->addFaker($manager);
-       $manager->flush();
-    }
-
-    private function addFaker(ObjectManager $em){
-
-        $users = $em->getRepository(User::class)->findAll();
-        //$users = $em->getRepository(User::class)->findOneBy(['email'=> $credentials['email']]);
-        //$roles
-
-
-        for ($i=1; $i < 30; $i++) {
+        $this->createMany(10, 'main_adverts', function($i) use ($manager) {
 
             $advert = new Advert();
             $advert->setDate($this->faker->dateTime('now',null));
             $advert->setTitle($this->faker->sentence(2,true));
-            //$advert->setAuthor($users[array_rand($users)]);
+            $advert->setAuthor($this->getRandomReference('main_users_Entreprise'));
             $advert->setContent($this->faker->text(200));
-            $advert->setPublished($this->faker->boolean); 
-
+            $advert->setPublished($this->faker->boolean);
             $image = new Image();
             $image->setUrl($this->faker->imageUrl(640,480));
             $image->setAlt($this->faker->sentence(20,true));
 
             $advert->setImage($image);
-            
-            $em->persist($advert);
-        }
-        
+
+            return $advert;
+        });
+
+        $manager->flush();
+
     }
     public function getDependencies() {
         return [
