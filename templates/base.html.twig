@@ -84,6 +84,9 @@
                 <div class="list-group">
 
                     <a href="{{ path('home')}}" class="list-group-item">Tous les annonces </a>
+                    {% if app.user %}
+                    <a href="" class="list-group-item"> Mes annonces </a>
+                    {% endif %}
                     <a href="{{ path('add')}}" class="list-group-item">Ajouter une annonce </a>
                   
                     

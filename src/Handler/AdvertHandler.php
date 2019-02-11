@@ -18,12 +18,10 @@ class AdvertHandler
     }
     public function handle(FormInterface $form, Request $request)
     {
-        //dd($this->security->getUser());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            //dd($request);
             $advert = $form->getData();
 
             $advert->setAuthor($this->security->getUser());
@@ -33,19 +31,11 @@ class AdvertHandler
                 $advertSkill->setAdvert($advert);
             }
 
-            //$em = $this->getDoctrine()->getManager();
-
             $this->ObjectManager->persist($advert);
-
             $this->ObjectManager->flush();
 
-           
-                 
             return true;
         }
-
         return false;
     }
-
-   
 }
