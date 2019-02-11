@@ -12,6 +12,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\{Advert, Image, Application, Skill, AdvertSkill, Category};
 use App\Repository\AdvertRepository;
 use App\Form\{AdvertType, AdvertEditType, SkillType, AdvertSkillType };
+use App\Handler\AdvertHandler;
 
 class AdvertController extends AbstractController
 {
@@ -20,9 +21,9 @@ class AdvertController extends AbstractController
      */
     public function showAllAdvert(EntityManagerInterface $em )
     {
-        $advertsRepository = $em->getRepository(Advert::class)->findAll();
-        
 
+        $advertsRepository = $em->getRepository(Advert::class)->findAll();
+    
         return $this->render('Advert/advert.html.twig',[
             'adverts' => $advertsRepository
         ]);
@@ -49,7 +50,7 @@ class AdvertController extends AbstractController
     /**
      * @Route("/add", name="add")
      */
-    public function addAdvert(Request $request)
+    public function addAdvert(Request $request, AdvertHandler $handler )
     {
 
         $advert = new Advert();
@@ -64,40 +65,15 @@ class AdvertController extends AbstractController
 
         $form = $this->createForm(AdvertType::class, $advert);
         
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            //dd($request);
-            $advert = $form->getData();
-
+        if($handler->handle($form, $request)){  
             
-            foreach($advert->getAdvertSkills() as $advertSkill){
-                
-                $advertSkill->setAdvert($advert);
-            }
-
-            /*foreach($advert->getCategories() as $category){
-                
-                $advert->addCtegoy($advert);
-            }*/
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($advert);
-
-            $em->flush();
-
             $this->addFlash(
                 'notice',
                 'Your changes were saved!'
-            );
-                 
+            ); 
             return $this->redirectToRoute('view', ['id' => $advert->getId()]);
         }
-
-        //dd($form->createView());
-
-
+      
         return $this->render('Advert/addAdvert.html.twig',[
             'form' => $form->createView()
         ]);
