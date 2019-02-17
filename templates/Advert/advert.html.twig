@@ -50,9 +50,9 @@
                   <small class="text-muted">
                   
                    {% if(advert.author == app.user) %}
-                  <a href="{{ path('edit', {'id': advert.id }) }}"> Modifier </a>----
-                  <a href="{{ path('delete', {'id': advert.id }) }}"> Supprimer </a>----
-                  <a href="{{ path('postuler', {'id': advert.id }) }}"> Postuler </a>
+                  <a href="{{ path('edit', {'id': advert.id }) }}" class="btn btn-outline-dark" > Modifier </a>
+                  <a href="{{ path('delete', {'id': advert.id }) }}" class="btn btn-outline-dark"> X </a>
+                  <a href="{{ path('postuler', {'id': advert.id }) }}" class="btn btn-outline-dark" > Postuler </a>
                   {% endif %}
                   </small>
                 </div>

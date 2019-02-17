@@ -20,6 +20,5 @@ class AccountController extends AbstractController
         $logger->debug('Checking account page for '.$this->getUser()->getEmail());
         return $this->render('account/application.html.twig');
     }
-
    
 }
