@@ -44,7 +44,7 @@
                     <a href="{{ path('view', {'id': advert.id }) }}">{{ advert.title }}</a>
                   </h4>
                   <h5>{{ advert.date|date('d/m/Y', "Europe/Paris") }}</h5>
-                  <p class="card-text">{{ advert.content }}</p>
+                  <p class="card-text">{{ advert.content|truncate }}</p>
                 </div>
                 <div class="card-footer">
                   <small class="text-muted">
@@ -65,7 +65,7 @@
           </div>
           <!-- /.row -->
 
-        </div>
+     </div>
     {% endif %}	
 
 {% endblock %}

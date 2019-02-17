@@ -21,9 +21,7 @@ class AdvertController extends AbstractController
      */
     public function showAllAdvert(EntityManagerInterface $em )
     {
-
         $advertsRepository = $em->getRepository(Advert::class)->findAll();
-    
         return $this->render('Advert/advert.html.twig',[
             'adverts' => $advertsRepository
         ]);
@@ -34,17 +32,11 @@ class AdvertController extends AbstractController
      */
     public function viewAdvert(EntityManagerInterface $em, Advert $advert)
     {
-        /*if (null === $advert) {
-            throw new NotFoundHttpException("L'annonce d'id ".$advert->getId()." n'existe pas.");
-        }*/
-
         $listAdvertSkills = $em->getRepository(AdvertSkill::class)->findBy(['advert' => $advert]);
-        
         return $this->render('Advert/viewAdvert.html.twig', [
             'advert' => $advert,
             'listAdvertSkills' => $listAdvertSkills
         ]);
-
     }
 
     /**
@@ -52,17 +44,13 @@ class AdvertController extends AbstractController
      */
     public function addAdvert(Request $request, AdvertHandler $handler )
     {
-
         $advert = new Advert();
-        //$advertSkill = new AdvertSkill();
-        //$advertSkill->setAdvert($advert->getId());
 
         // Cette date sera donc préaffichée dans le formulaire, cela facilite le travail de l'utilisateur
         $advert->setDate(new \Datetime());
 
         //$form   = $this->get('form.factory')->create(AdvertType::class, $advert);
-        //Methode raccourcie 
-
+        //Methode raccourcie
         $form = $this->createForm(AdvertType::class, $advert);
         
         if($handler->handle($form, $request)){  
@@ -77,7 +65,6 @@ class AdvertController extends AbstractController
         return $this->render('Advert/addAdvert.html.twig',[
             'form' => $form->createView()
         ]);
-
     }
 
     /**
@@ -85,15 +72,10 @@ class AdvertController extends AbstractController
      */
     public function editAdvert(Advert $advert,Request $request, $id)
     {
-        
-        
         $form = $this->createForm(AdvertEditType::class, $advert);
         $form->handleRequest($request);
 
-        
         if ($form->isSubmitted() && $form->isValid()) {
-
-        
             $em = $this->getDoctrine()->getManager();
             $em->persist($advert);
             $em->flush();
@@ -104,13 +86,10 @@ class AdvertController extends AbstractController
             );
       
             return $this->redirectToRoute('view', ['id' => $advert->getId()]);
-            
         }
         return $this->render('Advert/addAdvert.html.twig',[
             'form' => $form->createView()
         ]);
-       
-
     }
      
     /**
@@ -144,7 +123,6 @@ class AdvertController extends AbstractController
                 'No product found for id '.$advert->getId()
             );
         }
-        
         // Candidature 1
         $application1 = new Application();
         $application1->setAuthor('MarMicheakine');
@@ -155,45 +133,15 @@ class AdvertController extends AbstractController
          $application2->setAuthor('Alain');
          $application2->setContent("ddddd");
          $application2->setDate( new \Datetime());
-         
 
-         
          $application1->setAdvert($advert);
          $application2->setAdvert($advert);
 
-         
          $em->persist($application1);
          $em->persist($application2);
 
+         $em->flush();
 
-        $em->flush();
-
-        return new Response('ok');
+         return new Response('ok');
     }
-
-    /**
-     * @Route("/load", name="load")
-     */
-    public function loadTest(ObjectManager $manager)
-    {
-        $adverts = $advertsRepository = $manager->getRepository(Advert::class)->findAll();
-        $skills = $advertsRepository = $manager->getRepository(Skill::class)->findAll();
-        $level = ['Débutant', 'Avisé ', 'Expert'];
-
-        //var_dump($level[array_rand($level)]); die();
-
-        for ($i=1; $i < 30; $i++) {
-            $advertSkill = new AdvertSkill();
-            $advertSkill->setLevel($level[array_rand($level)]);
-            $advertSkill->setAdvert($adverts[array_rand($adverts)]);
-            $advertSkill->setSkill($skills[array_rand($skills)]);
-
-            $manager->persist($advertSkill);
-        }
-       
-        $manager->flush();
-
-        return new Response('ok');
-    }
-
 }
