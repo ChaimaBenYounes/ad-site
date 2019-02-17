@@ -15,7 +15,7 @@ class AdvertSkillFixtures extends Fixture implements DependentFixtureInterface
 
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(10, 'main_advertSkill', function($i) use ($manager) {
+        $this->createMany(30, 'main_advertSkill', function($i) use ($manager) {
 
             $advertSkill = new AdvertSkill();
             $advertSkill->setLevel($this->faker->randomElement(self::$level));

@@ -33,17 +33,17 @@
 
           <div class="row">
           {% for advert in adverts %}
-                {% if advert.published == true %}
+                {% if advert.published  %}
             <div class="col-lg-4 col-md-6 mb-4">
               <div class="card h-100">
               {% if advert.image is not null %}
                 <a href="{{ path('view', {'id': advert.id }) }}"><img class="card-img-top" src="{{ advert.image.url }}" alt="{{ advert.image.alt }}"></a>
               {% endif %}
                 <div class="card-body">
-                  <h4 class="card-title">
+                  <h5 class="card-title">
                     <a href="{{ path('view', {'id': advert.id }) }}">{{ advert.title }}</a>
-                  </h4>
-                  <h5>{{ advert.date|date('d/m/Y', "Europe/Paris") }}</h5>
+                  </h5>
+                  <h6>{{ advert.date|ago }}</h6>
                   <p class="card-text">{{ advert.content|truncate }}</p>
                 </div>
                 <div class="card-footer">

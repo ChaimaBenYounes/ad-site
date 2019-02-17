@@ -10,10 +10,10 @@ class AdvertFixtures extends BaseFixture implements DependentFixtureInterface
 {
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(10, 'main_adverts', function($i) use ($manager) {
+        $this->createMany(30, 'main_adverts', function($i) use ($manager) {
 
             $advert = new Advert();
-            $advert->setDate($this->faker->dateTime('now',null));
+            $advert->setDate($this->faker->dateTimeBetween('-1 years', 'now', null));
             $advert->setTitle($this->faker->sentence(2,true));
             $advert->setAuthor($this->getRandomReference('main_users_Entreprise'));
             $advert->setContent($this->faker->text(200));

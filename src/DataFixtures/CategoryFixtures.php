@@ -10,7 +10,7 @@ class CategoryFixtures extends BaseFixture
 {
     public function loadData(ObjectManager $manager)
     {
-        $this->createMany(10, 'main_category', function($i) use ($manager) {
+        $this->createMany(30, 'main_category', function($i) use ($manager) {
         $category = new Category();
         $category->setName($this->faker->firstName);
 
