@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\{Advert, Image, Application, Skill, AdvertSkill, Category};
 use App\Repository\AdvertRepository;
 use App\Form\{AdvertType, AdvertEditType, SkillType, AdvertSkillType };
@@ -19,11 +20,19 @@ class AdvertController extends AbstractController
     /**
      * @Route("/home", name="home")
      */
-    public function showAllAdvert(EntityManagerInterface $em )
+    public function showAllAdvert(EntityManagerInterface $em, Request $request, PaginatorInterface $paginatorInterface )
     {
         $advertsRepository = $em->getRepository(Advert::class)->findAll();
+
+        $pagination = $paginatorInterface->paginate(
+            $advertsRepository,
+            $request->query->getInt('page', 1),
+            9
+        );
+
         return $this->render('Advert/advert.html.twig',[
-            'adverts' => $advertsRepository
+            'adverts' => $advertsRepository,
+            'pagination' => $pagination
         ]);
     }
 

@@ -8,7 +8,7 @@ use App\DataFixtures\{SkillFixture, AdvertFixtures};
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class AdvertSkillFixtures extends Fixture implements DependentFixtureInterface
+class AdvertSkillFixtures extends BaseFixture implements DependentFixtureInterface
 {
 
     private static $level = ['Débutant', 'Avisé ', 'Expert'];
