@@ -22,7 +22,7 @@ class AdvertController extends AbstractController
      */
     public function showAllAdvert(EntityManagerInterface $em, Request $request, PaginatorInterface $paginatorInterface )
     {
-        $advertsRepository = $em->getRepository(Advert::class)->findAll();
+        $advertsRepository = $em->getRepository(Advert::class)->findByPublishedTrue();
 
         $pagination = $paginatorInterface->paginate(
             $advertsRepository,
