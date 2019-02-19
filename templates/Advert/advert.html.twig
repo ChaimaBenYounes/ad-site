@@ -31,39 +31,46 @@
             </a>
           </div>
 
+          <div class="count">
+              {{ pagination.getTotalItemCount }} annonce(s)
+          </div>
           <div class="row">
-          {% for advert in adverts %}
-                {% if advert.published == true %}
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card h-100">
-              {% if advert.image is not null %}
-                <a href="{{ path('view', {'id': advert.id }) }}"><img class="card-img-top" src="{{ advert.image.url }}" alt="{{ advert.image.alt }}"></a>
-              {% endif %}
-                <div class="card-body">
-                  <h4 class="card-title">
-                    <a href="{{ path('view', {'id': advert.id }) }}">{{ advert.title }}</a>
-                  </h4>
-                  <h5>{{ advert.date|date('d/m/Y', "Europe/Paris") }}</h5>
-                  <p class="card-text">{{ advert.content }}</p>
-                </div>
-                <div class="card-footer">
-                  <small class="text-muted">
-                  <a href="{{ path('edit', {'id': advert.id }) }}"> Modifier </a>----
-                  <a href="{{ path('delete', {'id': advert.id }) }}"> Supprimer </a>----
-                  <a href="{{ path('postuler', {'id': advert.id }) }}"> Postuler </a>
-                  </small>
-                </div>
+
+          {% for advert in pagination %}
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+            {% if advert.image is not null %}
+              <a href="{{ path('view', {'id': advert.id }) }}"><img class="card-img-top" src="{{ advert.image.url }}" alt="{{ advert.image.alt }}"></a>
+            {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="{{ path('view', {'id': advert.id }) }}">{{ advert.title }} </a>
+                </h5>
+                <h6>{{ advert.date|ago }}</h6>
+                <p class="card-text">{{ advert.content|truncate }}</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">
+
+                 {% if(advert.author == app.user) %}
+                <a href="{{ path('edit', {'id': advert.id }) }}" class="btn btn-outline-dark" > Modifier </a>
+                <a href="{{ path('delete', {'id': advert.id }) }}" class="btn btn-outline-dark"> X </a>
+                <a href="{{ path('postuler', {'id': advert.id }) }}" class="btn btn-outline-dark" > Postuler </a>
+                {% endif %}
+                </small>
               </div>
             </div>
+          </div>
+          {% endfor %}
 
-              {% endif %}
-			{% endfor %}
-
+          </div>
+          <div class="navigation">
+              {{ knp_pagination_render(pagination) }}
           </div>
           <!-- /.row -->
 
-        </div>
+     </div>
     {% endif %}	
 
 {% endblock %}
-				

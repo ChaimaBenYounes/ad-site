@@ -19,22 +19,19 @@ class AdvertRepository extends ServiceEntityRepository
         parent::__construct($registry, Advert::class);
     }
 
-    // /**
-    //  * @return Advert[] Returns an array of Advert objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Advert[] Returns an array of Advert objects
+     */
+    public function findByPublishedTrue()
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('a.published = true')
             ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Advert

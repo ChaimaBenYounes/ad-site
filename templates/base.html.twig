@@ -23,36 +23,49 @@
   <!-- Navigation -->
 
   
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
   
 
       <div class="container">
         <a class="navbar-brand" href="{{ path('home') }}">Site Annonce</a>
-        <a class="navbar-toggler" href="{{ path('login') }}">Login</a>
-        {#
-        
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
+        {% if is_granted('ROLE_USER') %}
+        
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
               <a class="nav-link" href="{{ path('home')}}">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
+            {% if is_granted('ROLE_ADMIN') %}
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+              <a class="nav-link" href="{{ path('app_account') }}">Account</a>
             </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="#">Services</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
+              <a class="nav-link" href="#"> Contact </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
             </li>
           </ul>
-        </div>
-        #}
+        {% else %}
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+              <a class="nav-link active"  href="{{ path('app_login') }}">Login </a>
+          </li> 
+          <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_register')}}"> Register </a>
+          </li>
+        </ul>
+        {% endif %}
+         </div>
       </div>
       
     </nav>
@@ -65,25 +78,30 @@
             
 
             {% block body %}
-            
-            <div class="col-lg-3">
 
-                <h1 class="my-4">Annonces </h1>
-                <div class="list-group">
+              <div class="col-lg-3">
+                  {% if app.user %}
+                    <h1 class="my-4"> Bonjour {{ app.user.firstName }}</h1>
+                  {% endif %}
+                <div class="nav flex-column">
 
-                    <a href="{{ path('home')}}" class="list-group-item">Tous les annonces </a>
-                    <a href="{{ path('add')}}" class="list-group-item">Ajouter une annonce </a>
-                  
-                    
+                  <a href="{{ path('home')}}" class="nav-link">Tous les annonces </a>
+                    {% if app.user %}
+                      <a href="" class="nav-link"> Mes annonces </a>
+                    {% endif %}
+                  <a href="{{ path('add')}}" class="nav-link">Ajouter une annonce </a>
+
+
                 </div>
 
-            </div>
+              </div>
+
 
             {% endblock %}
         </div>
 
     </div>
-    <footer class="py-5 bg-dark">
+    <footer class="py-5 bg-info">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
       </div>
@@ -94,6 +112,7 @@
     {% block javascripts %}
     <script src="{{ asset('advert/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('advert/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
     {% endblock %}
   </body>
 

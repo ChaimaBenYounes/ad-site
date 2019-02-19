@@ -23,7 +23,6 @@ class AdvertType extends AbstractType
         $builder
             ->add('date',  DateTimeType::class)
             ->add('title', TextType::class)
-            ->add('author', TextType::class)
             ->add('content', TextareaType::class)
             ->add('image', ImageType::class)
             ->add('published', CheckboxType::class, ['required' => false])
@@ -49,9 +48,7 @@ class AdvertType extends AbstractType
                 'label' =>'Categories', 
                 'choice_label' => 'name',
                 'expanded' => false,
-                'multiple'      => true,
-            
-               
+                'multiple'      => true, 
             ])
 
             /*->add('categories', EntityType::class, [

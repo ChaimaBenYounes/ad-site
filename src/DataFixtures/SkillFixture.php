@@ -2,27 +2,20 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Skill;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class SkillFixture extends Fixture
+class SkillFixture extends BaseFixture
 {
-    public function load(ObjectManager $manager)
+    protected function loadData(ObjectManager $manager)
     {
-        // Liste des noms de compétences à ajouter
-        $names = array('PHP', 'Symfony', 'C++', 'Java', 'Photoshop', 'Blender', 'Bloc-note');
-
-        foreach ($names as $name) {
-            // On crée la compétence
+        $this->createMany(30, 'main_skill', function($i) use ($manager) {
             $skill = new Skill();
-            $skill->setName($name);
-      
-            // On la persiste
-            $manager->persist($skill);
-          }
-      
-          // On déclenche l'enregistrement de toutes les catégories
-          $manager->flush();
+            $skill->setName($this->faker->firstName);
+
+            return $skill;
+        });
+
+        $manager->flush();
     }
 }

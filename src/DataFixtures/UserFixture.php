@@ -2,33 +2,62 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\User;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixture extends Fixture
+
+class UserFixture extends BaseFixture
 {
-  
-    public function load(ObjectManager $manager)
-    {
+    private $passwordEncoder;
 
-        $listNames = array('Alexandre', 'Marine', 'Anna');
-    
-        foreach ($listNames as $name) {
-          // On crée l'utilisateur
-          $user = new User;
-    
-          // Le nom d'utilisateur et le mot de passe sont identiques pour l'instant
-          $user->setFirstName($name);
-          $user->setEmail('user.'.$name.'@gmail.com');
-        
-          // On définit uniquement le role ROLE_USER qui est le role de base
-          $user->setRoles(['ROLE_USER']);
-    
-          // On le persiste
-          $manager->persist($user);
-        }
-    
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder){
+        $this->passwordEncoder = $passwordEncoder;
+    }
+  
+    public function loadData(ObjectManager $manager)
+    {
+        $this->createMany(10, 'main_users', function($i) use ($manager) {
+            $user = new User();
+            $user->setEmail(sprintf('users_%d@example.com', $i));
+            $user->setFirstName($this->faker->firstName);
+            //$user->setRoles(['ROLE_USER']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                '123'
+            ));
+
+            return $user;
+        });
+
+        $this->createMany(10, 'main_users_Entreprise', function($i) use ($manager) {
+            $user = new User();
+            $user->setEmail(sprintf('users_Entre_%d@example.com', $i));
+            $user->setFirstName($this->faker->firstName);
+            $user->setRoles(['ROLE_USER_Entreprise']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                '123'
+            ));
+
+            return $user;
+        });
+
+        $this->createMany(3, 'admin_users', function($i) {
+            $user = new User();
+            $user->setEmail(sprintf('admin_%d@thespacebar.com', $i));
+            $user->setFirstName($this->faker->firstName);
+            $user->setRoles(['ROLE_ADMIN']);
+
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                '123'
+            ));
+
+            return $user;
+        });
+
         $manager->flush();
+
       }
 }

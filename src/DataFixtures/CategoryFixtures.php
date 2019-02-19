@@ -2,27 +2,21 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Category;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class CategoryFixtures extends Fixture 
+
+class CategoryFixtures extends BaseFixture
 {
-    public function load(ObjectManager $manager) 
+    public function loadData(ObjectManager $manager)
     {
-        $categoriesName = [
-            'Développement Web',
-            'Développement Mobile',
-            'Graphisme', 
-            'Integration', 
-            'Réseau'
-            ];
-        foreach($categoriesName as $name){
+        $this->createMany(30, 'main_category', function($i) use ($manager) {
+        $category = new Category();
+        $category->setName($this->faker->firstName);
 
-           $category = new Category();
-           $category->setName($name);
-           $manager->persist($category);
-        }
+        return $category;
+        });
+
         $manager->flush();
     }
 
