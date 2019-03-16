@@ -18,7 +18,7 @@ class AccountController extends AbstractController
     public function index(LoggerInterface $logger)
     {
         $logger->debug('Checking account page for '.$this->getUser()->getEmail());
-        return $this->render('account/application.html.twig');
+        return $this->render('application/application.html.twig');
     }
    
 }
