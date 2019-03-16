@@ -1,6 +1,8 @@
 easy_admin:
+    site_name: "Site d'annonce"
     entities:
         # List the entity class name you want to manage
         - App\Entity\Advert
         - App\Entity\Application
         - App\Entity\Category
+        - sApp\Entity\User
