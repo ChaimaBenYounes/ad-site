@@ -3,6 +3,32 @@ easy_admin:
     design:
         brand_color: '#1ABC9C'
         form_theme: '@EasyAdmin/form/bootstrap_4.html.twig'
+        menu:
+            - { entity: 'User', css_class: 'default', target: '_parent'  }
+            - { entity: 'Advert', icon: 'id-card-o'}
+            - { entity: 'Advert', icon: 'phone'}
+            - { entity: 'Advert', icon: 'thermometer-2'}
+            - { entity: 'Advert', icon: 'leaf'}
+            - { entity: 'Advert', icon: 'th-list'}
+            - { entity: 'Category', icon: 'sticky-note' } #sans icon
+            - { entity: 'Images', label: 'Tags', icon: 'tag'  }
+            - { label: 'Some Task', route: 'home' }
+            - label: 'Clients'
+              children: ['Category', 'Images', 'User', 'Advert']
+            - label: 'Users'
+              icon: 'users'
+              children:
+              - { label: 'Admin', icon: 'exclamation', route: 'home' }
+              - { label: 'User', icon: 'paw', entity: 'Images' }
+              - { label: 'Entreprise', icon: 'pencil', entity: 'Advert' }
+            - {label: 'aaa', icon: ''}
+    list:
+        actions:
+            - { name: 'search', icon: 'search', label: 'Search' }
+            - { name: 'new', icon: 'add', label: 'New' }
+            - { name: 'edit', icon: 'edit', label: 'Edit' }
+            - { name: 'delete', icon: 'delete', label: 'Delete' }
+            - { name: 'show', icon: 'info-circle', label: '' }
     entities:
         # List the entity class name you want to manage
         Advert:
@@ -10,8 +36,10 @@ easy_admin:
             label: 'Annonces'
             list:
                 title: "La liste des %%entity_label%%"
-                max_results: 10
+                max_results: 20
                 sort: ['date', 'ASC']
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: 'Edit' }
         Application:
             class: App\Entity\Application
             label: 'Les candidatures'
@@ -22,7 +50,7 @@ easy_admin:
             label: 'Les categories'
             list:
                  title: "Les categories"
-        Users:
+        User:
             class: App\Entity\User
             label: 'La list des utilisateurs'
             list:
