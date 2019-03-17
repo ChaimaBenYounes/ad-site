@@ -4,31 +4,30 @@ easy_admin:
         brand_color: '#1ABC9C'
         form_theme: '@EasyAdmin/form/bootstrap_4.html.twig'
         menu:
-            - { entity: 'User', css_class: 'default', target: '_parent'  }
+            - { entity: 'UserAdmin', css_class: 'default', target: '_parent'  }
             - { entity: 'Advert', icon: 'id-card-o'}
             - { entity: 'Advert', icon: 'phone'}
             - { entity: 'Advert', icon: 'thermometer-2'}
             - { entity: 'Advert', icon: 'leaf'}
             - { entity: 'Advert', icon: 'th-list'}
             - { entity: 'Category', icon: 'sticky-note' } #sans icon
-            - { entity: 'Images', label: 'Tags', icon: 'tag'  }
+            - { entity: 'Images', label: 'Images', icon: 'image'  }
             - { label: 'Some Task', route: 'home' }
-            - label: 'Clients'
-              children: ['Category', 'Images', 'User', 'Advert']
+            - { label: 'Dashboard', route: 'home'}
             - label: 'Users'
               icon: 'users'
               children:
-              - { label: 'Admin', icon: 'exclamation', route: 'home' }
-              - { label: 'User', icon: 'paw', entity: 'Images' }
-              - { label: 'Entreprise', icon: 'pencil', entity: 'Advert' }
+              - { label: 'Admin', icon: 'user-secret', entity: 'UserAdmin' }
+              - { label: 'User', icon: 'user', entity: 'UserSimple' }
+              - { label: 'Entreprise', icon: 'address-book', entity: 'UserEntreprise' }
             - {label: 'aaa', icon: ''}
     list:
         actions:
-            - { name: 'search', icon: 'search', label: 'Search' }
-            - { name: 'new', icon: 'add', label: 'New' }
-            - { name: 'edit', icon: 'edit', label: 'Edit' }
-            - { name: 'delete', icon: 'delete', label: 'Delete' }
-            - { name: 'show', icon: 'info-circle', label: '' }
+            - { name: 'search', icon: 'search', label: 'search' }
+            - { name: 'new', icon: 'plus-circle', label: 'New' }
+            - { name: 'edit', icon: 'edit', label: '' }
+            - { name: 'delete', icon: 'trash', label: '' }
+            - { name: 'show', icon: 'eye', label: '' }
     entities:
         # List the entity class name you want to manage
         Advert:
@@ -38,8 +37,6 @@ easy_admin:
                 title: "La liste des %%entity_label%%"
                 max_results: 20
                 sort: ['date', 'ASC']
-                actions:
-                    - { name: 'edit', icon: 'pencil', label: 'Edit' }
         Application:
             class: App\Entity\Application
             label: 'Les candidatures'
@@ -50,11 +47,22 @@ easy_admin:
             label: 'Les categories'
             list:
                  title: "Les categories"
-        User:
+        UserAdmin:
             class: App\Entity\User
+            #controller: AppBundle\Entity\admin\AdminController
             label: 'La list des utilisateurs'
             list:
                  title: "Les utilisateurs"
+                 dql_filter: "entity.roles = 'ROLE_ADMIN' "
+                 #- { property: 'purposes', type_options: { query_builder: ['Bundle\Repository\EasyAdmin\SomeRepo', 'getAccessible'] } }
+        UserSimple:
+            class: App\Entity\User
+            list:
+                 #dql_filter: 'entity.roles = ""'
+        UserEntreprise:
+            class: App\Entity\User
+            list:
+                 #ql_filter: 'entity.roles = ROLE_USER_Entreprise'
         Images:
             class: App\Entity\Image
             label: 'La list des images'

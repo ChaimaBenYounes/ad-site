@@ -1,4 +1,4 @@
 easy_admin_bundle:
     resource: '@EasyAdminBundle/Controller/EasyAdminController.php'
-    prefix: /admin # TODO<-- change this value to sercret backend
+    prefix: /secret-backend # TODO<-- change this value to sercret backend
     type: annotation
